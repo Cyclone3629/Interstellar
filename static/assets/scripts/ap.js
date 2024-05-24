@@ -1,6 +1,9 @@
 let appInd
 let g = window.location.pathname === "/gm"
-let t = window.location.pathname === "/ta"
+let a = window.location.pathname === "/as"
+let c = window.location.pathname === "/ts"
+let t = window.top.location.pathname === "/ta"
+
 function saveToLocal(path) {
   sessionStorage.setItem("GoUrl", path)
 }
@@ -19,13 +22,13 @@ function handleClick(app) {
   } else if (app.local2) {
     saveToLocal(app.link)
     window.location.href = app.link
-    if (t) {
-      window.location.href = app.link
-    }
   } else if (app.blank) {
     blank(app.link)
   } else if (app.now) {
     now(app.link)
+    if (t) {
+      window.location.href = app.link
+    }
   } else if (app.custom) {
     Custom(app)
   } else if (app.dy) {
@@ -43,7 +46,9 @@ function CustomApp(customApp) {
   let apps
   if (g) {
     apps = localStorage.getItem("Gcustom")
-  } else {
+  } else if (c) {
+    apps = localStorage.getItem("Tcustom")
+  } else if (a) {
     apps = localStorage.getItem("Acustom")
   }
 
@@ -59,7 +64,9 @@ function CustomApp(customApp) {
 
   if (g) {
     localStorage.setItem("Gcustom", JSON.stringify(apps))
-  } else {
+  } else if (c) {
+    localStorage.setItem("Tcustom", JSON.stringify(apps))
+  } else if (a) {
     localStorage.setItem("Acustom", JSON.stringify(apps))
   }
 }
@@ -68,7 +75,9 @@ function setPin(index) {
   let pins
   if (g) {
     pins = localStorage.getItem("Gpinned")
-  } else {
+  } else if (c) {
+    pins = localStorage.getItem("Tpinned")
+  } else if (a) {
     pins = localStorage.getItem("Apinned")
   }
 
@@ -85,7 +94,9 @@ function setPin(index) {
   }
   if (g) {
     localStorage.setItem("Gpinned", pins)
-  } else {
+  } else if (c) {
+    localStorage.setItem("Tpinned", pins)
+  } else if (a) {
     localStorage.setItem("Apinned", pins)
   }
   location.reload()
@@ -95,7 +106,7 @@ function pinContains(i, p) {
   if (p == "") {
     return false
   }
-  for (var x = 0; x < p.length; x++) {
+  for (var x = 0; x < p.length; x += 1) {
     if (p[x] === i) {
       return true
     }
@@ -169,7 +180,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let storedApps
   if (g) {
     storedApps = JSON.parse(localStorage.getItem("Gcustom"))
-  } else {
+  } else if (c) {
+    storedApps = JSON.parse(localStorage.getItem("Tcustom"))
+  } else if (a) {
     storedApps = JSON.parse(localStorage.getItem("Acustom"))
   }
   if (storedApps) {
@@ -182,7 +195,9 @@ document.addEventListener("DOMContentLoaded", () => {
 let path = "/assets/json/a.min.json"
 if (g) {
   path = "/assets/json/g.min.json"
-} else {
+} else if (c) {
+  path = "/assets/json/t.min.json"
+} else if (a) {
   path = "/assets/json/a.min.json"
 }
 fetch(path)
@@ -191,16 +206,22 @@ fetch(path)
   })
   .then((appsList) => {
     appsList.sort((a, b) => {
-      if (a.name.startsWith("[Custom]")) return -1
-      if (b.name.startsWith("[Custom]")) return 1
+      if (a.name.startsWith("[Custom]")) {
+        return -1
+      }
+      if (b.name.startsWith("[Custom]")) {
+        return 1
+      }
       return a.name.localeCompare(b.name)
     })
     const nonPinnedApps = document.querySelector(".container-apps")
     const pinnedApps = document.querySelector(".pinned-apps")
     if (g) {
       var pinList = localStorage.getItem("Gpinned") || ""
-    } else {
+    } else if (a) {
       var pinList = localStorage.getItem("Apinned") || ""
+    } else if (c) {
+      var pinList = localStorage.getItem("Tpinned") || ""
     }
     pinList = pinList ? pinList.split(",").map(Number) : []
     appInd = 0
@@ -293,7 +314,7 @@ fetch(path)
       } else {
         nonPinnedApps.appendChild(columnDiv)
       }
-      appInd++
+      appInd += 1
     })
 
     const appsContainer = document.getElementById("apps-container")
@@ -308,7 +329,7 @@ function show_category() {
   var selectedCategories = Array.from(document.querySelectorAll("#category option:checked")).map((option) => option.value)
   var games = document.getElementsByClassName("column")
 
-  for (var i = 0; i < games.length; i++) {
+  for (var i = 0; i < games.length; i += 1) {
     var game = games[i]
     var categories = game.getAttribute("data-category").split(" ")
 
@@ -325,7 +346,7 @@ function search_bar() {
   var filter = input.value.toLowerCase()
   var games = document.getElementsByClassName("column")
 
-  for (var i = 0; i < games.length; i++) {
+  for (var i = 0; i < games.length; i += 1) {
     var game = games[i]
     var name = game.getElementsByTagName("p")[0].textContent.toLowerCase()
 

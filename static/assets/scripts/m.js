@@ -1,3 +1,17 @@
+/*
+LICENSE_SERVER_URL = "https://main.gointerstellar.app/validate?license="
+async function checkLicense(pass) {
+  if (localStorage["LICENSE_CHECK"]) {
+    return true
+  }
+  licenseCheck = (await (await fetch(LICENSE_SERVER_URL + pass + "&host=" + location.origin)).json())["status"]
+  if (licenseCheck == "License valid") {
+    localStorage["LICENSE_CHECK"] = true
+    return true
+  }
+  return false
+} */
+
 // Ads
 document.addEventListener("DOMContentLoaded", function () {
   if (localStorage.getItem("ad") === null || localStorage.getItem("ad") === "default") {
@@ -8,44 +22,19 @@ document.addEventListener("DOMContentLoaded", function () {
   if (advDiv && localStorage.getItem("ad") === "on") {
     var script = document.createElement("script")
     script.type = "text/javascript"
-    script.src = "//oysterscoldtiny.com/1c/c3/8a/1cc38a6899fdf8ba4dfe779bcc54627b.js"
+    script.src = "//oysterscoldtiny.com/54/8d/25/548d25a3d0428027eb19da7447bb6c85.js"
     advDiv.appendChild(script)
-  } else if (advDiv && localStorage.getItem("ad") === "off") {
+  } else if (advDiv && localStorage.getItem("ad") === "no") {
     advDiv.remove()
   }
 })
+
 // Dynamic & Ads
 document.addEventListener("DOMContentLoaded", function () {
   if (localStorage.getItem("dy") === null || localStorage.getItem("dy") === undefined) {
     localStorage.setItem("dy", "false")
   }
 })
-// Clear Cache
-function Clear() {
-  document.cookie.split("; ").forEach(function (cookie) {
-    var cookieName = cookie.split("=")[0]
-    document.cookie = cookieName + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT"
-  })
-
-  localStorage.clear()
-  sessionStorage.clear()
-
-  if (caches && caches.keys) {
-    caches.keys().then(function (cacheNames) {
-      return Promise.all(
-        cacheNames.map(function (cacheName) {
-          return caches.delete(cacheName)
-        })
-      )
-    })
-  }
-}
-
-if (localStorage.getItem("cache") !== "3") {
-  Clear()
-  localStorage.setItem("cache", "3")
-}
-
 // Nav
 var nav = document.querySelector(".fixed-nav-bar")
 
@@ -57,7 +46,8 @@ if (nav) {
     <div class="fixed-nav-bar-right">
       <a class="navbar-link" href="/./gm"><i class="fa-solid fa-gamepad navbar-icon"></i><an>Ga</an><an>mes</an></a>
       <a class="navbar-link" href="/./as"><i class="fa-solid fa-phone navbar-icon"></i><an>Ap</an><an>ps</an></a>
-      ${window.top.location.pathname !== "/ta" ? '<a class="navbar-link" href="/./ta"><i class="fa-solid fa-laptop navbar-icon"></i><an>Ta</an><an>bs</an></a>' : ""}
+      <a class="navbar-link" href="/./ts"><i class="fa-solid fa-folder navbar-icon"></i><an>To</an><an>ols</an></a>
+      ${!(window.top !== window || window.location.pathname === "/ta") ? '<a class="navbar-link" href="/./ta"><i class="fa-solid fa-laptop navbar-icon"></i><an>Ta</an><an>bs</an></a>' : ""}
       <a class="navbar-link" href="/./st"><i class="fa-solid fa-gear navbar-icon settings-icon"></i><an>Set</an><an>tings</an></a>
     </div>`
   nav.innerHTML = html
@@ -109,6 +99,17 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
   const options = {
     Google: { name: "Google", icon: "/assets/media/favicon/google.png" },
+    "Savvas Realize": { name: "Savvas Realize", icon: "/assets/media/favicon/savvas-realize.png" },
+    SmartPass: { name: "SmartPass", icon: "/assets/media/favicon/smartpass.png" },
+    "World Book Online - Super Home": { name: "Super Home Page", icon: "/assets/media/favicon/wbo.ico" },
+    "World Book Online - Student": { name: "WBO Student | Home Page", icon: "/assets/media/favicon/wbo.ico" },
+    "World Book Online - Timelines": { name: "Timelines - Home Page", icon: "/assets/media/favicon/wbo.ico" },
+    Naviance: { name: "Naviance Student", icon: "/assets/media/favicon/naviance.png" },
+    "PBS Learning Media": {
+      name: "PBS LearningMedia | Teaching Resources For Students And Teachers",
+      icon: "/assets/media/favicon/pbslearningmedia.ico",
+    },
+    "PBS Learning Media Student Home": { name: "Student Homepage | PBS LearningMedia", icon: "/assets/media/favicon/pbslearningmedia.ico" },
     Drive: { name: "My Drive - Google Drive", icon: "/assets/media/favicon/drive.png" },
     Classroom: { name: "Home", icon: "/assets/media/favicon/classroom.png" },
     Schoology: { name: "Home | Schoology", icon: "/assets/media/favicon/schoology.png" },
